@@ -10,9 +10,9 @@ namespace AgentApi.Services
     public class ExecutorService
     {
         private readonly PlannerService _planner;
-        private readonly McpClient _mcpClient;
+        private readonly IMcpClient _mcpClient;
 
-        public ExecutorService(PlannerService planner, McpClient mcpClient)
+        public ExecutorService(PlannerService planner, IMcpClient mcpClient)
         {
             _planner = planner;
             _mcpClient = mcpClient;

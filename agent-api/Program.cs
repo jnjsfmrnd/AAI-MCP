@@ -8,7 +8,7 @@ using AgentApi.Services;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddHttpClient<McpClient>();
-builder.Services.AddSingleton<LlmProvider>();
+builder.Services.AddHttpClient<LlmProvider>();
 builder.Services.AddSingleton<PlannerService>();
 builder.Services.AddSingleton<ExecutorService>();
 

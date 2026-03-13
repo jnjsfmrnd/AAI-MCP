@@ -32,6 +32,14 @@ dotnet run
 
 The API will be available on `http://localhost:5000` (or as printed by dotnet).
 
+### Run unit tests
+
+From `agent-api/`:
+
+```bash
+dotnet test
+```
+
 ### Example request
 
 ```bash

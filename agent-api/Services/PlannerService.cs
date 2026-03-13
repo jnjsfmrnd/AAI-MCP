@@ -1,5 +1,5 @@
+using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
 using AgentApi.Models;
@@ -10,18 +10,48 @@ namespace AgentApi.Services
     {
         private readonly LlmProvider _llmProvider;
 
+        // Prompt used to instruct the LLM to return a JSON-only plan.
+        private const string PromptTemplate =
+            "You are a planner that breaks a user task into a sequence of steps. " +
+            "Each step must be a tool call. Respond with JSON only. " +
+            "Return an array of objects where each object has 'step', 'action', and 'args'.\n\n" +
+            "User task:";
+
         public PlannerService(LlmProvider llmProvider)
         {
             _llmProvider = llmProvider;
         }
 
-        public Task<List<PlanStep>> CreatePlanAsync(string task)
+        public async Task<List<PlanStep>> CreatePlanAsync(string task)
         {
-            // Currently a simple rule-based planner; future versions can use the LLM provider.
+            var prompt = $"{PromptTemplate} {task}";
+
+            try
+            {
+                var response = await _llmProvider.CompleteAsync(prompt);
+                var plan = JsonSerializer.Deserialize<List<PlanStep>>(response, new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true
+                });
+
+                if (plan is { Count: > 0 })
+                {
+                    return plan;
+                }
+            }
+            catch
+            {
+                // Fall back to a simple plan if parsing fails.
+            }
+
+            return CreateFallbackPlan(task);
+        }
+
+        private static List<PlanStep> CreateFallbackPlan(string task)
+        {
             var lower = task?.Trim().ToLowerInvariant() ?? string.Empty;
             var steps = new List<PlanStep>();
 
-            // Always start by listing blobs in the datasets container
             steps.Add(new PlanStep
             {
                 Step = 1,
@@ -29,7 +59,6 @@ namespace AgentApi.Services
                 Args = JsonSerializer.SerializeToElement(new { container = "datasets" })
             });
 
-            // If the task looks like it wants CSV processing, add a helper step
             if (lower.Contains("csv") || lower.Contains("clean") || lower.Contains("transform"))
             {
                 steps.Add(new PlanStep
@@ -45,7 +74,7 @@ namespace AgentApi.Services
                 });
             }
 
-            return Task.FromResult(steps);
+            return steps;
         }
     }
 }

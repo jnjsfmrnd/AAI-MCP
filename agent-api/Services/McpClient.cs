@@ -8,7 +8,17 @@ using Microsoft.Extensions.Configuration;
 
 namespace AgentApi.Services
 {
-    public class McpClient
+    public interface IMcpClient
+    {
+        Task<ToolCall> ListBlobsAsync(string container);
+        Task<ToolCall> ReadBlobAsync(string container, string blob);
+        Task<ToolCall> WriteBlobAsync(string container, string blob, string content);
+        Task<ToolCall> TransformCsvAsync(string csv, string instructions);
+        Task<ToolCall> HttpFetchAsync(string url);
+        Task<ToolCall> SummarizeAsync(string content);
+    }
+
+    public class McpClient : IMcpClient
     {
         private readonly HttpClient _http;
         private readonly string _baseUrl;
@@ -67,16 +77,16 @@ namespace AgentApi.Services
             }
         }
 
-        public Task<ToolCall> ListBlobsAsync(string container) => CallToolAsync("blob.list", new { container });
+        public virtual Task<ToolCall> ListBlobsAsync(string container) => CallToolAsync("blob.list", new { container });
 
-        public Task<ToolCall> ReadBlobAsync(string container, string blob) => CallToolAsync("blob.read", new { container, blob });
+        public virtual Task<ToolCall> ReadBlobAsync(string container, string blob) => CallToolAsync("blob.read", new { container, blob });
 
-        public Task<ToolCall> WriteBlobAsync(string container, string blob, string content) => CallToolAsync("blob.write", new { container, blob, content });
+        public virtual Task<ToolCall> WriteBlobAsync(string container, string blob, string content) => CallToolAsync("blob.write", new { container, blob, content });
 
-        public Task<ToolCall> TransformCsvAsync(string csv, string instructions) => CallToolAsync("csv.transform", new { csv, instructions });
+        public virtual Task<ToolCall> TransformCsvAsync(string csv, string instructions) => CallToolAsync("csv.transform", new { csv, instructions });
 
-        public Task<ToolCall> HttpFetchAsync(string url) => CallToolAsync("http.fetch", new { url });
+        public virtual Task<ToolCall> HttpFetchAsync(string url) => CallToolAsync("http.fetch", new { url });
 
-        public Task<ToolCall> SummarizeAsync(string content) => CallToolAsync("file.summarize", new { content });
+        public virtual Task<ToolCall> SummarizeAsync(string content) => CallToolAsync("file.summarize", new { content });
     }
 }
