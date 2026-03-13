@@ -1,13 +1,16 @@
+using System.Threading.Tasks;
+
 namespace AgentApi.Services
 {
     public class LlmProvider
     {
-        // TODO: Implement LLM provider interface for Azure/Groq/Ollama
+        // TODO: Implement real LLM provider (Azure/Groq/Ollama).
+        // For now this is a stub used for future integration.
 
         public Task<string> CompleteAsync(string prompt)
         {
-            // Placeholder
-            return Task.FromResult(string.Empty);
+            // Placeholder: returns the prompt for debugging.
+            return Task.FromResult(prompt);
         }
     }
 }

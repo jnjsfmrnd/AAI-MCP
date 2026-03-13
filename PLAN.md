@@ -14,12 +14,13 @@
 - ✅ MCP tool `blob.list` implemented and callable
 - ✅ MCP tools scaffolded: `blob.read`, `blob.write`, `csv.transform`, `http.fetch`, `file.summarize`
 - ✅ Basic .NET API scaffold created (placeholder `/agent/run` endpoint)
+- ✅ PlannerService + ExecutorService + McpClient wired together with a basic execution flow
 
 ## Next steps
 
-1. Wire up `PlannerService` + `ExecutorService` + `McpClient` to execute tool plans
-2. Add local dev docs (Azure Functions Core Tools, env vars, storage emulator)
-3. Add end-to-end test for "list blobs" and "read + transform + write"
+1. Add local dev docs (Azure Functions Core Tools, env vars, storage emulator)
+2. Add end-to-end test for "list blobs" and "read + transform + write"
+3. Improve PlannerService logic (LLM integration) and make execution more dynamic
 
 
 # ============================================================
