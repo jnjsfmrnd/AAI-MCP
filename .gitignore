@@ -1,0 +1,39 @@
+# Visual Studio
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Build results
+bin/
+obj/
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.env
+.venv/
+venv/
+ENV/
+env/
+pyvenv.cfg
+
+# Azure Functions
+local.settings.json
+
+# node
+node_modules/
+
+# Logs
+*.log
+
+# User-specific
+*.swp
+.DS_Store
+
+# Secrets
+*.pem
+*.key
